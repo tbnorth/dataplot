@@ -20,7 +20,11 @@ formats and sets up a suggested skeleton for the `dict`:
 ```python
     {
         # author info. etc.
-        '_metadata': {'generated': time.asctime()},
+        '_metadata': {
+            'generated': time.asctime(),
+            # a pointer to this class, to explain JSON format
+            'relation': "https://github.com/tbnorth/dataplot",
+        },
         # general plot data, title, x label, etc.
         'ax': {'x': {}, 'y': {}},
         'ds': {},  # x, y, etc., lists of the same length
