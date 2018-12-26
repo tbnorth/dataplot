@@ -63,13 +63,11 @@ class DataPlot(object):
             'kv': {},  # arbitrary key / value info.
         }
 
-    def save_plot(self, builder, path=None, formats=None, name=None):
+    def save_plot(self, builder=None, path=None, formats=None, name=None):
         """Plot the data
 
-        Args:
-            builder (func): something that builds a figure given self.ds()
-
         Kwargs:
+            builder (func): something that builds a figure given self.ds()
             path (str): path to save figures
             formats (list): formats, incl. `show`, `asis`, and `json`
                 `show` shows the plot interactively, `json` saves the
@@ -80,7 +78,8 @@ class DataPlot(object):
         path = path or '.'
         formats = formats or ['show']
         name = name or self.name
-        builder(self.ds())
+        if builder and formats != ['json']:  # not needed for JSON by itself
+            builder(self.ds())
         for format in formats:
             if format == 'show':  # after saving all other formats
                 continue
@@ -90,7 +89,7 @@ class DataPlot(object):
             else:
                 fullpath = self._path(path, name, format)
                 if format == 'asis':  # cut off '.asis' to get supplied name
-                    fullpath = path[:-5]
+                    fullpath = fullpath[:-5]
                 plt.savefig(fullpath)
         if 'show' in formats:
             plt.show()
